@@ -9,6 +9,18 @@ export const getAll = async (req, res) => {
     }
 }
 
+export const getById = async (req, res) => {
+    const id = req.params.id;
+
+    try {
+        const producto = await model.getById(id);
+        res.status(200).json(producto);
+    } catch (error) {
+        res.status(404).json({ message: error.message });
+    }
+};
+
+
 export const create = async (req, res) => {
     const data = req.body;
     console.log(data);
