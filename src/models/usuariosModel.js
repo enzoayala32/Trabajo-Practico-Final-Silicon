@@ -25,7 +25,7 @@ const create = async (data) => {
 
         // Construir un nuevo objeto sin la contraseña
         const userWithoutPassword = {
-            id: insertedUser.id,
+            user_id: insertedUser.user_id,
             username: insertedUser.username,
             email: insertedUser.email,
             roles_id: insertedUser.roles_id
