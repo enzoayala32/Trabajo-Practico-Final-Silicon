@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken"
 import bc, { genSalt } from "bcrypt"
 
 export const register = async (req, res) => {
-    const { username, email, contraseña, roles_id } = req.body
+    const { username, email, contraseña } = req.body
 
     try {
 
@@ -15,10 +15,11 @@ export const register = async (req, res) => {
         const salt = await bc.genSalt(10)
         const hashedPassword = await bc.hash(contraseña, salt)
 
-        const newUser = await model.create({ username, email, contraseña: hashedPassword, roles_id });
+        const newUser = await model.create({ username, email, contraseña: hashedPassword});
 
         const token = jwt.sign({
-            email: newUser.details.email
+            email: newUser.details.email,
+            roles_id:newUser.details.roles_id
         },
             process.env.JWT_SECRET,
             {
@@ -51,7 +52,8 @@ export const login = async (req, res) => {
         }
 
         const token = jwt.sign({
-            email: user.email
+            email: user.email,
+            roles_id:user.roles_id
         },
             process.env.JWT_SECRET,
             {
@@ -77,3 +79,23 @@ export const profile=async(req,res)=>{
         res.status(500).json(error.message)
     }
 }
+
+export const getAll=async(req,res)=>{
+    try {
+        const users = await model.getAll()
+        res.status(200).json(users)
+    } catch (error) {
+        res.status(500).json(error.message)
+    }
+}
+
+export const updateRoles = async (req, res) => {
+    const { id } = req.params; 
+
+    try {
+        const result = await model.updateRoles(id); 
+        res.status(200).json(result);
+    } catch (error) {
+        res.status(500).json({ message: `Ha ocurrido un error: ${error.message}` });
+    }
+};

@@ -1,5 +1,15 @@
 import db from "../config/database.js"
 
+const getAll = async () => {
+    try {
+        const sentence = "SELECT * FROM usuarios"
+        const [rows] = await db.query(sentence)
+        return rows
+    } catch (error) {
+        throw new Error(error.message)
+    }
+}
+
 const getById = async (user_id) => {
     try {
         const sentence = "SELECT * FROM usuarios WHERE user_id=?"
@@ -15,10 +25,10 @@ const getById = async (user_id) => {
 
 const create = async (data) => {
     try {
-        const { username, email, contraseña, roles_id } = data;
+        const { username, email, contraseña } = data;
 
-        const sentence = "INSERT INTO usuarios (username, email, contraseña ,roles_id ) VALUES (?,?,?,?)";
-        const [result] = await db.query(sentence, [username, email, contraseña, roles_id]);
+        const sentence = "INSERT INTO usuarios (username, email, contraseña ) VALUES (?,?,?)";
+        const [result] = await db.query(sentence, [username, email, contraseña]);
 
 
         const insertedUser = await getById(result.insertId);
@@ -51,9 +61,34 @@ const findByEmail = async (email) => {
     }
 }
 
+const updateRoles = async (user_id) => {
+    try {
+        
+        const sentence = "UPDATE usuarios SET roles_id = 2 WHERE user_id=?";
+        const [result] = await db.query(sentence, [user_id]);
+
+        if (result.affectedRows === 0) {
+            throw new Error(`El usuario con ID ${user_id} no fue encontrado.`);
+        }
+
+        const updatedUser = await getById(user_id);
+
+       
+        return {
+            message: `El rol del usuario con ID ${user_id} fue actualizado con éxito a rol 2`,
+            details: updatedUser
+        };
+    } catch (error) {
+        throw new Error(error.message);
+    }
+};
+
+
 
 
 export default {
     create,
     findByEmail,
+    getAll,
+    updateRoles
 };
