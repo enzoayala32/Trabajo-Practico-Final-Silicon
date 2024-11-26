@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken"
 
 import model from "../models/usuariosModel.js";
 
-export const validateRegister = [
+export const validateRegister =()=> [
     body("username")
         .notEmpty().withMessage("El nombre de usuario es obligatorio")
         .isLength({ min: 3, max: 64 }).withMessage("El nombre de usuario debe tener entre 3 y 64 caracteres")
@@ -44,7 +44,7 @@ export const validateRegister = [
     }
 ];
 
-export const validateLogin = [
+export const validateLogin =()=> [
     body("email")
         .isEmail().withMessage("El formato del correo electrónico no es válido")
         .normalizeEmail(),
