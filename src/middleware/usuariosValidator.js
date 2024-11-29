@@ -7,7 +7,7 @@ export const validateRegister = () => [
         .notEmpty().withMessage("El nombre de usuario es obligatorio")
         .isLength({ min: 3, max: 64 }).withMessage("El nombre de usuario debe tener entre 3 y 64 caracteres")
         .custom(async (username) => {
-            const user = await model.findByEmail(username);
+            const user = await model.findByUsername(username);
             if (user) {
                 throw new Error("El nombre de usuario ya está en uso");
             }

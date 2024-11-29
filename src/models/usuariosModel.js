@@ -61,6 +61,17 @@ const findByEmail = async (email) => {
     }
 }
 
+const findByUsername = async (username) => {
+    try {
+        const sentence = "SELECT * FROM usuarios WHERE username=?"
+        const [rows] = await db.query(sentence,[username])
+
+        return rows[0]
+    } catch (error) {
+        throw new Error(error.message);
+    }
+}
+
 const updateRoles = async (user_id) => {
     try {
         
@@ -89,6 +100,7 @@ const updateRoles = async (user_id) => {
 export default {
     create,
     findByEmail,
+    findByUsername,
     getAll,
     updateRoles
 };
